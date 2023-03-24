@@ -1,15 +1,15 @@
 import time
 import discord
-from ..discobot_actions import *
-from emoji_actions import Emoji_Action as EA
-from action_timers import Action_Timer as AT
-from graphics import moon_bar
+from . import emoji_actions
+from .emoji_actions import Emoji_Action as EA
+from .action_timers import Action_Timer as AT
+from .graphics import moon_bar
 
 async def egg_timer(message):
     sex = 32
     if len(message.content.split()) >= 2:
         numero = message.content.split()[1]
-        if isdigit(numero):
+        if numero.isdigit():
             sex = int(numero)
     
     egg = await message.channel.send("EGG TIME 2?")
@@ -31,14 +31,16 @@ async def egg_timer(message):
 
     #then add reaction buttons
     async def cancel_egg():
-        thistimer.cancel_timer()
+        thistimer.cancel()
         em = discord.Embed(title="EGG CANCELED",
                            description="Egg was stopped by a user :/",
                            color=0xeea898)
         await egg.edit(embed=em, content="")
+        return emoji_actions.ea_response(clear_reactions=True)
 
     def reset_egg():
-        thistimer.current_time = thistimer.start_time
+        thistimer.current_time = thistimer.length
+        return emoji_actions.ea_response(complete_action=False)
 
     cancel_a = EA("❌", "cancel", cancel_egg)
     reset_a = EA("🔁", "reset", reset_egg)

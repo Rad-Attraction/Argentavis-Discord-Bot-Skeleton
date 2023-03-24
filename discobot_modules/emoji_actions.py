@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 
 active_actions = {}
 
-class emoji_action:
+class Emoji_Action:
     """
     An emoji button that appears on a post, and does a specific action when it is pressed.
     This stores the two function callables and an arguments tuple.

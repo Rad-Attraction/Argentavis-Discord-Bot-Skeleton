@@ -1,8 +1,10 @@
 import discord
-import discobot_actions
-import discobot_fun
-from discobot_utils import pretty_disco
-from discobot_utils import text_coloring as tc
+import discobot_modules.action_timers as at
+import discobot_modules.emoji_actions as ea
+import discobot_modules.dice as dice
+import discobot_modules.egg as egg
+from discobot_modules.pretty_disco import pretty_listen
+import discobot_modules.text_coloring as tc
 
 print("Modules Imported.")
 
@@ -12,8 +14,6 @@ client = discord.Client(intents = intents)
 
 home_channel = None
 
-print(locals())
-print(globals())
 
 @client.event
 async def on_ready():
@@ -21,7 +21,7 @@ async def on_ready():
     print(msg)
     if home_channel:
         await client.get_channel(home_channel).send(msg)
-    await discobot_actions.action_timers.iterate_timers()
+    await at.iterate_timers()
 
 @client.event
 async def on_reaction_add(reaction, user):
@@ -32,7 +32,7 @@ async def on_reaction_add(reaction, user):
     if (user == client.user):
         return
 
-    await emoji_actions.action_listen_list(reaction, user)
+    await ea.action_listen_list(reaction, user)
 
 
 @client.event
@@ -69,8 +69,8 @@ async def on_message(message):
             await message.channel.send("Killing bot process...")
             quit()
         
-    pretty_disco.pretty_listen(message)
-    await action_timers.listen_timers(message)
+    pretty_listen(message)
+    await at.listen_timers(message)
 
 
 def login():
